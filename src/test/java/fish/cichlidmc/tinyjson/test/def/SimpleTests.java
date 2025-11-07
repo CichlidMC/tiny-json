@@ -46,55 +46,51 @@ public final class SimpleTests {
 
 	@Test
 	public void garbage(@Resource String text) {
-		JsonException exception = assertThrowsExactly(JsonException.class, () -> TinyJson.parseOrThrow(text));
-		assertEquals("Could not parse value at line 1, col. 1", exception.getMessage());
+		failToParse(text, "Could not parse value at line 1, col. 1");
 	}
 
 	@Test
 	public void arrayTrailingComma(@Resource String text) {
-		JsonException exception = assertThrowsExactly(JsonException.class, () -> TinyJson.parseOrThrow(text));
-		assertEquals("Expected value after comma at line 6, col. 1", exception.getMessage());
+		failToParse(text, "Expected value after comma at line 6, col. 1");
 	}
 
 	@Test
 	public void objectTrailingComma(@Resource String text) {
-		JsonException exception = assertThrowsExactly(JsonException.class, () -> TinyJson.parseOrThrow(text));
-		assertEquals("Expected entry after comma at line 8, col. 1", exception.getMessage());
+		failToParse(text, "Expected entry after comma at line 8, col. 1");
 	}
 
 	@Test
 	public void brokenString(@Resource String text) {
-		JsonException exception = assertThrowsExactly(JsonException.class, () -> TinyJson.parseOrThrow(text));
-		assertEquals("Found linebreak interrupting string on line 2", exception.getMessage());
+		failToParse(text, "Found linebreak interrupting string on line 2");
 	}
 
 	@Test
 	public void missingColon(@Resource String text) {
-		JsonException exception = assertThrowsExactly(JsonException.class, () -> TinyJson.parseOrThrow(text));
-		assertEquals("Expected colon before value at line 2, col. 7", exception.getMessage());
+		failToParse(text, "Expected colon before value at line 2, col. 7");
 	}
 
 	@Test
 	public void unquotedString(@Resource String text) {
-		JsonException exception = assertThrowsExactly(JsonException.class, () -> TinyJson.parseOrThrow(text));
-		assertEquals("Could not parse value at line 2, col. 3", exception.getMessage());
+		failToParse(text, "Could not parse value at line 2, col. 3");
 	}
 
 	@Test
 	public void arrayMissingComma(@Resource String text) {
-		JsonException exception = assertThrowsExactly(JsonException.class, () -> TinyJson.parseOrThrow(text));
-		assertEquals("Expected comma before value at line 4, col. 4", exception.getMessage());
+		failToParse(text, "Expected comma before value at line 4, col. 4");
 	}
 
 	@Test
 	public void objectMissingComma(@Resource String text) {
-		JsonException exception = assertThrowsExactly(JsonException.class, () -> TinyJson.parseOrThrow(text));
-		assertEquals("Expected comma before entry at line 4, col. 4", exception.getMessage());
+		failToParse(text, "Expected comma before entry at line 4, col. 4");
 	}
 
 	@Test
 	public void incompleteObject(@Resource String text) {
+		failToParse(text, "Unexpected EOF at line 3, col. 1");
+	}
+
+	private static void failToParse(String text, String errorMessage) {
 		JsonException exception = assertThrowsExactly(JsonException.class, () -> TinyJson.parseOrThrow(text));
-		assertEquals("Unexpected EOF at line 3, col. 1", exception.getMessage());
+		assertEquals(errorMessage, exception.getMessage());
 	}
 }

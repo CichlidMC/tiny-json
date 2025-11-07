@@ -41,7 +41,7 @@ public final class ResourceExtension implements ParameterResolver {
 	}
 
 	private static String determineFileName(Resource resource, Method method) throws ParameterResolutionException {
-		if (!resource.value().isBlank())
+		if (!resource.value().isEmpty())
 			return resource.value();
 
 		String name = method.getName();
