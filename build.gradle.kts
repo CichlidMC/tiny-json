@@ -1,6 +1,6 @@
 plugins {
-    id("java-library")
-    id("maven-publish")
+    alias(libs.plugins.java.library)
+    alias(libs.plugins.maven.publish)
 }
 
 group = "fish.cichlidmc"
@@ -11,7 +11,8 @@ repositories {
 }
 
 dependencies {
-    compileOnlyApi("org.jetbrains:annotations:24.1.0")
+    compileOnlyApi(libs.jetbrains.annotations)
+    testImplementation(libs.bundles.junit)
 }
 
 java {
@@ -19,6 +20,10 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 publishing {

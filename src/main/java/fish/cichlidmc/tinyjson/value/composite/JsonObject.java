@@ -1,28 +1,31 @@
 package fish.cichlidmc.tinyjson.value.composite;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.BiConsumer;
-
 import fish.cichlidmc.tinyjson.JsonException;
 import fish.cichlidmc.tinyjson.value.JsonValue;
 import fish.cichlidmc.tinyjson.value.primitive.JsonBool;
 import fish.cichlidmc.tinyjson.value.primitive.JsonNull;
 import fish.cichlidmc.tinyjson.value.primitive.JsonNumber;
 import fish.cichlidmc.tinyjson.value.primitive.JsonString;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.SequencedCollection;
+import java.util.SequencedSet;
+import java.util.Set;
+import java.util.function.BiConsumer;
 
 /**
  * Class for objects represented in JSON. Stores a map of keys to other JsonValues.
- * Also tracks which fields are directly accessed for verification purposes.
+ * Also tracks which fields have been queried directly for verification purposes.
  */
 public final class JsonObject extends JsonValue {
 	private final LinkedHashMap<String, JsonValue> entries = new LinkedHashMap<>();
-	private final Set<String> accessed = new HashSet<>();
+	private final Set<String> queried = new HashSet<>();
 
 	public JsonObject put(String key, JsonValue value) {
 		this.setChildPath(key, value);
@@ -44,7 +47,7 @@ public final class JsonObject extends JsonValue {
 	 */
 	@Nullable
 	public JsonValue get(String key) {
-		this.accessed.add(key);
+		this.queried.add(key);
 		return this.entries.get(key);
 	}
 
@@ -89,7 +92,7 @@ public final class JsonObject extends JsonValue {
 		JsonValue removed = this.entries.remove(key);
 		if (removed != null) {
 			removed.setPath(null);
-			this.accessed.remove(key);
+			this.queried.remove(key);
 		}
 		return removed;
 	}
@@ -107,17 +110,44 @@ public final class JsonObject extends JsonValue {
 	}
 
 	/**
-	 * @return the set of fields that have been accessed directly
+	 * @return a read-only view of all keys in this object
 	 */
-	public Set<String> accessedFields() {
-		return this.accessed;
+	public SequencedSet<String> keys() {
+		return Collections.unmodifiableSequencedSet(this.entries.sequencedKeySet());
 	}
 
 	/**
-	 * @return a read-only set of entries in this object.
+	 * @return a read-only view of all values in this object
+	 */
+	public SequencedCollection<JsonValue> values() {
+		return Collections.unmodifiableSequencedCollection(this.entries.sequencedValues());
+	}
+
+	/**
+	 * @return a read-only view of all entries in this object
 	 */
 	public Set<Map.Entry<String, JsonValue>> entrySet() {
-		return Collections.unmodifiableSet(this.entries.entrySet());
+		return Collections.unmodifiableSequencedSet(this.entries.sequencedEntrySet());
+	}
+
+	/**
+	 * @return a read-only view of the set of keys that have been accessed directly.
+	 * This will not include keys that have been iterated over.
+	 */
+	public Set<String> queriedKeys() {
+		return Collections.unmodifiableSet(this.queried);
+	}
+
+	/**
+	 * Create a new set containing all keys within this object that have not been queried.
+	 * This is equivalent to {@code keys - queriedKeys}. Since a new set is returned, you
+	 * are free to modify it if you so desire.
+	 */
+	@Contract("->new")
+	public Set<String> unusedKeys() {
+		Set<String> keys = new HashSet<>(this.entries.keySet());
+		keys.removeAll(this.queried);
+		return keys;
 	}
 
 	@Override

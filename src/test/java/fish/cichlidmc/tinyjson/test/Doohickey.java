@@ -1,11 +1,11 @@
-package fish.cichlidmc.tinyjson.test.deserialize;
+package fish.cichlidmc.tinyjson.test;
+
+import fish.cichlidmc.tinyjson.value.JsonValue;
+import fish.cichlidmc.tinyjson.value.composite.JsonObject;
+import fish.cichlidmc.tinyjson.value.primitive.JsonNumber;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import fish.cichlidmc.tinyjson.value.primitive.JsonNumber;
-import fish.cichlidmc.tinyjson.value.composite.JsonObject;
-import fish.cichlidmc.tinyjson.value.JsonValue;
 
 public record Doohickey(String name, int i, double d, Thingy thingy) {
 	public static Doohickey parse(JsonObject json) {
