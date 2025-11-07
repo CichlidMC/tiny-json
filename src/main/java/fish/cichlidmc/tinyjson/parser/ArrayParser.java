@@ -7,8 +7,10 @@ import java.io.IOException;
 import fish.cichlidmc.tinyjson.parser.util.ParseInput;
 import fish.cichlidmc.tinyjson.value.composite.JsonArray;
 
-public class ArrayParser {
+public final class ArrayParser {
 	public static final char COMMA = ',';
+
+	private ArrayParser() {}
 
 	static JsonArray parse(ParseInput input) throws IOException {
 		input.next(); // discard opening [

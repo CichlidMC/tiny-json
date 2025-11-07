@@ -12,7 +12,7 @@ import fish.cichlidmc.tinyjson.value.primitive.JsonNull;
 import fish.cichlidmc.tinyjson.value.primitive.JsonNumber;
 import fish.cichlidmc.tinyjson.value.primitive.JsonString;
 
-public class JsonArray extends JsonValue implements Iterable<JsonValue> {
+public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	private final List<JsonValue> values = new ArrayList<>();
 
 	public static JsonArray of(JsonValue... values) {
@@ -65,7 +65,7 @@ public class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	@Override
 	public Iterator<JsonValue> iterator() {
-		return new JsonArrayIterator();
+		return new JsonArrayIterator(this.values.iterator());
 	}
 
 	public Stream<JsonValue> stream() {
@@ -86,7 +86,12 @@ public class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof JsonArray && ((JsonArray) obj).values.equals(this.values);
+		return obj instanceof JsonArray that && that.values.equals(this.values);
+	}
+
+	@Override
+	public int hashCode() {
+		return this.values.hashCode();
 	}
 
 	@Override
@@ -123,12 +128,12 @@ public class JsonArray extends JsonValue implements Iterable<JsonValue> {
 		return this.getPath() + '[' + i + ']';
 	}
 
-	private class JsonArrayIterator implements Iterator<JsonValue> {
+	private static final class JsonArrayIterator implements Iterator<JsonValue> {
 		private final Iterator<JsonValue> wrapped;
 		private JsonValue lastReturned;
 
-		private JsonArrayIterator() {
-			this.wrapped = JsonArray.this.values.iterator();
+		private JsonArrayIterator(Iterator<JsonValue> wrapped) {
+			this.wrapped = wrapped;
 		}
 
 		@Override

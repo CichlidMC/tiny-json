@@ -11,8 +11,10 @@ import fish.cichlidmc.tinyjson.parser.util.ParseInput;
 import fish.cichlidmc.tinyjson.parser.util.ParserUtils;
 import fish.cichlidmc.tinyjson.value.primitive.JsonString;
 
-public class StringParser {
+public final class StringParser {
 	public static final char BACKSLASH = '\\';
+
+	private StringParser() {}
 
 	static JsonString parse(ParseInput input) throws IOException {
 		input.next(); // discard opening "

@@ -1,6 +1,6 @@
 package fish.cichlidmc.tinyjson.parser.util;
 
-public class ParserUtils {
+public final class ParserUtils {
 	public static final int EOF = -1;
 
 	public static final char OBJ_START = '{';
@@ -19,6 +19,8 @@ public class ParserUtils {
 	public static final char[] TRUE = "true".toCharArray();
 	public static final char[] FALSE = "false".toCharArray();
 	public static final char[] NULL = "null".toCharArray();
+
+	private ParserUtils() {}
 
 	public static boolean charsEqual(char[] a, char[] b) {
 		if (a.length != b.length)

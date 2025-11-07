@@ -2,7 +2,7 @@ package fish.cichlidmc.tinyjson.value.primitive;
 
 import fish.cichlidmc.tinyjson.value.JsonPrimitive;
 
-public class JsonNull extends JsonPrimitive<Object> {
+public final class JsonNull extends JsonPrimitive<Object> {
 	@Override
 	public Object value() {
 		return null;
@@ -28,7 +28,8 @@ public class JsonNull extends JsonPrimitive<Object> {
 		return obj instanceof JsonNull;
 	}
 
-	public static JsonNull create() {
-		return new JsonNull();
+	@Override
+	public int hashCode() {
+		return 0;
 	}
 }

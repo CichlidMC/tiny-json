@@ -50,7 +50,7 @@ public class ComplexJsonTests {
 			.put("test", new JsonNumber(1))
 			.put("int", new JsonNumber(5))
 			.put("object", new JsonObject()
-					.put("bool", JsonBool.createTrue())
+					.put("bool", new JsonBool(true))
 					.put("/*string//", "/*yes*///")
 					.put("empty", new JsonNull())
 			);

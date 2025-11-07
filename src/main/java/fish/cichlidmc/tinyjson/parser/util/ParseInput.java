@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 import fish.cichlidmc.tinyjson.JsonException;
 
-public class ParseInput {
+public final class ParseInput {
 	private final PushbackReader reader;
 
 	private int line = 1;

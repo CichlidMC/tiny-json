@@ -14,12 +14,13 @@ import fish.cichlidmc.tinyjson.value.primitive.JsonBool;
 import fish.cichlidmc.tinyjson.value.primitive.JsonNull;
 import fish.cichlidmc.tinyjson.value.primitive.JsonNumber;
 import fish.cichlidmc.tinyjson.value.primitive.JsonString;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Class for objects represented in JSON. Stores a map of keys to other JsonValues.
  * Also tracks which fields are directly accessed for verification purposes.
  */
-public class JsonObject extends JsonValue {
+public final class JsonObject extends JsonValue {
 	private final LinkedHashMap<String, JsonValue> entries = new LinkedHashMap<>();
 	private final Set<String> accessed = new HashSet<>();
 
@@ -38,24 +39,45 @@ public class JsonObject extends JsonValue {
 	public JsonObject put(String key, double value)		{ return this.put(key, new JsonNumber(value));	}
 	public JsonObject put(String key, String value)		{ return this.put(key, new JsonString(value));	}
 
-	public JsonValue getNullable(String key) {
+	/**
+	 * @return the value associated with the given key, or null if no value exists
+	 */
+	@Nullable
+	public JsonValue get(String key) {
 		this.accessed.add(key);
 		return this.entries.get(key);
 	}
 
+	/**
+	 * @return an optional holding the value associated with the given key, or empty if no value exists
+	 */
 	public Optional<JsonValue> getOptional(String key) {
-		return Optional.ofNullable(this.getNullable(key));
+		return Optional.ofNullable(this.get(key));
 	}
 
 	/**
-	 * Get the value at the given key, throwing if it's missing.
+	 * @return the value associated with the given key, if present
+	 * @throws JsonException if there is no value associated with the given key
 	 */
-	public JsonValue get(String key) {
-		JsonValue value = this.getNullable(key);
+	public JsonValue getOrThrow(String key) throws JsonException {
+		JsonValue value = this.get(key);
 		if (value == null) {
 			throw new JsonException(this.makePath(key) + " does not exist");
 		}
 		return value;
+	}
+
+	/**
+	 * @return the value associated with the given key if present, otherwise a new {@link JsonNull}
+	 */
+	public JsonValue getOrJsonNull(String key) {
+		JsonValue value = this.get(key);
+		if (value != null)
+			return value;
+
+		JsonNull jsonNull = new JsonNull();
+		this.setChildPath(key, jsonNull);
+		return jsonNull;
 	}
 
 	/**
@@ -85,7 +107,7 @@ public class JsonObject extends JsonValue {
 	}
 
 	/**
-	 * @return the set of fields that have been accessed directly via {@link #get(String)}.
+	 * @return the set of fields that have been accessed directly
 	 */
 	public Set<String> accessedFields() {
 		return this.accessed;
@@ -112,7 +134,12 @@ public class JsonObject extends JsonValue {
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof JsonObject && ((JsonObject) obj).entries.equals(this.entries);
+		return obj instanceof JsonObject that && that.entries.equals(this.entries);
+	}
+
+	@Override
+	public int hashCode() {
+		return this.entries.hashCode();
 	}
 
 	@Override

@@ -2,11 +2,15 @@ package fish.cichlidmc.tinyjson.value.primitive;
 
 import fish.cichlidmc.tinyjson.value.JsonPrimitive;
 
-public class JsonBool extends JsonPrimitive<Boolean> {
+public final class JsonBool extends JsonPrimitive<Boolean> {
 	private final Boolean value;
 
 	public JsonBool(Boolean value) {
 		this.value = value;
+	}
+
+	public JsonBool(boolean value) {
+		this(Boolean.valueOf(value));
 	}
 
 	@Override
@@ -31,14 +35,11 @@ public class JsonBool extends JsonPrimitive<Boolean> {
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof JsonBool && ((JsonBool) obj).value.equals(this.value);
+		return obj instanceof JsonBool that && this.value.equals(that.value);
 	}
 
-	public static JsonBool createTrue() {
-		return new JsonBool(true);
-	}
-
-	public static JsonBool createFalse() {
-		return new JsonBool(false);
+	@Override
+	public int hashCode() {
+		return this.value.hashCode();
 	}
 }

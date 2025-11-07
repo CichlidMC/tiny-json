@@ -9,9 +9,11 @@ import fish.cichlidmc.tinyjson.value.composite.JsonObject;
 import fish.cichlidmc.tinyjson.value.primitive.JsonString;
 import fish.cichlidmc.tinyjson.value.JsonValue;
 
-public class ObjectParser {
+public final class ObjectParser {
 	public static final char COLON = ':';
 	public static final char COMMA = ',';
+
+	private ObjectParser() {}
 
 	static JsonObject parse(ParseInput input) throws IOException {
 		input.next(); // discard opening {

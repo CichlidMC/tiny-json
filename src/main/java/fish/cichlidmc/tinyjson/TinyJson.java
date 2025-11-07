@@ -30,34 +30,36 @@ import fish.cichlidmc.tinyjson.value.JsonValue;
  *     <li>Readers</li>
  * </ul>
  */
-public interface TinyJson {
+public final class TinyJson {
+	private TinyJson() {}
+
 	// String input
 
-	static JsonValue parse(String string) throws IOException {
+	public static JsonValue parse(String string) throws IOException {
 		return parse(new StringReader(string));
 	}
 
-	static JsonValue parseOrThrow(String string) {
+	public static JsonValue parseOrThrow(String string) {
 		return parseOrThrow(new StringReader(string));
 	}
 
 	// File input
 
-	static JsonValue parse(File file) throws IOException {
+	public static JsonValue parse(File file) throws IOException {
 		return parse(file.toPath());
 	}
 
-	static JsonValue parseOrThrow(File file) {
+	public static JsonValue parseOrThrow(File file) {
 		return parseOrThrow(file.toPath());
 	}
 
 	// Path input
 
-	static JsonValue parse(Path file) throws IOException {
+	public static JsonValue parse(Path file) throws IOException {
 		return parse(Files.newBufferedReader(file));
 	}
 
-	static JsonValue parseOrThrow(Path file) {
+	public static JsonValue parseOrThrow(Path file) {
 		try {
 			return parse(Files.newBufferedReader(file));
 		} catch (IOException e) {
@@ -67,11 +69,11 @@ public interface TinyJson {
 
 	// URI input
 
-	static JsonValue fetch(URI uri) throws IOException {
+	public static JsonValue fetch(URI uri) throws IOException {
 		return fetch(uri.toURL());
 	}
 
-	static JsonValue fetchOrThrow(URI uri) {
+	public static JsonValue fetchOrThrow(URI uri) {
 		try {
 			return fetchOrThrow(uri.toURL());
 		} catch (MalformedURLException e) {
@@ -81,13 +83,13 @@ public interface TinyJson {
 
 	// URL input
 
-	static JsonValue fetch(URL url) throws IOException {
+	public static JsonValue fetch(URL url) throws IOException {
 		URLConnection connection = url.openConnection();
 		connection.connect();
 		return parse(connection.getInputStream());
 	}
 
-	static JsonValue fetchOrThrow(URL url) {
+	public static JsonValue fetchOrThrow(URL url) {
 		try {
 			return fetch(url);
 		} catch (IOException e) {
@@ -97,21 +99,21 @@ public interface TinyJson {
 
 	// InputStream input
 
-	static JsonValue parse(InputStream stream) throws IOException {
+	public static JsonValue parse(InputStream stream) throws IOException {
 		return parse(new InputStreamReader(stream));
 	}
 
-	static JsonValue parseOrThrow(InputStream stream) {
+	public static JsonValue parseOrThrow(InputStream stream) {
 		return parseOrThrow(new InputStreamReader(stream));
 	}
 
 	// Reader input
 
-	static JsonValue parse(Reader reader) throws IOException {
+	public static JsonValue parse(Reader reader) throws IOException {
 		return ValueParser.parse(new ParseInput(reader));
 	}
 
-	static JsonValue parseOrThrow(Reader reader) {
+	public static JsonValue parseOrThrow(Reader reader) {
 		try {
 			return parse(reader);
 		} catch (IOException e) {

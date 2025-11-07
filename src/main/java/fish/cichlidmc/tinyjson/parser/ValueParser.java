@@ -9,7 +9,9 @@ import fish.cichlidmc.tinyjson.value.primitive.JsonBool;
 import fish.cichlidmc.tinyjson.value.primitive.JsonNull;
 import fish.cichlidmc.tinyjson.value.JsonValue;
 
-public class ValueParser {
+public final class ValueParser {
+	private ValueParser() {}
+
 	public static JsonValue parse(ParseInput input) throws IOException {
 		input.skipWhitespace();
 		char next = input.peekOrThrow();
@@ -29,16 +31,16 @@ public class ValueParser {
 
 		if (charsEqual(next4, TRUE)) {
 			input.next(4); // consume peeked chars
-			return JsonBool.createTrue();
+			return new JsonBool(true);
 		} else if (charsEqual(next4, NULL)) {
 			input.next(4);
-			return JsonNull.create();
+			return new JsonNull();
 		}
 
 		// of course false has to be longer
 		if (charsEqual(input.peek(5), FALSE)) {
 			input.next(5);
-			return JsonBool.createFalse();
+			return new JsonBool(false);
 		}
 
 		// none of the above

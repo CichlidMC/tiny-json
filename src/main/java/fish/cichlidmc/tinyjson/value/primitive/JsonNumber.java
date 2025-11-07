@@ -3,8 +3,20 @@ package fish.cichlidmc.tinyjson.value.primitive;
 import fish.cichlidmc.tinyjson.JsonException;
 import fish.cichlidmc.tinyjson.value.JsonPrimitive;
 
-public class JsonNumber extends JsonPrimitive<Double> {
-	protected final Double value;
+import java.text.NumberFormat;
+import java.util.Locale;
+
+public final class JsonNumber extends JsonPrimitive<Double> {
+	private static final NumberFormat formatter;
+
+	static {
+		formatter = NumberFormat.getNumberInstance(Locale.ROOT);
+		formatter.setGroupingUsed(false);
+		formatter.setMinimumFractionDigits(0);
+		formatter.setMinimumIntegerDigits(1);
+	}
+
+	private final Double value;
 
 	public JsonNumber(Double value) {
 		this.value = value;
@@ -47,12 +59,17 @@ public class JsonNumber extends JsonPrimitive<Double> {
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof JsonNumber && this.value.equals(((JsonNumber) obj).value);
+		return obj instanceof JsonNumber that && this.value.equals(that.value);
+	}
+
+	@Override
+	public int hashCode() {
+		return this.value.hashCode();
 	}
 
 	@Override
 	public String toString() {
-		return String.valueOf(this.value);
+		return formatter.format(this.value.doubleValue());
 	}
 
 	public class StrictAccess extends Number {

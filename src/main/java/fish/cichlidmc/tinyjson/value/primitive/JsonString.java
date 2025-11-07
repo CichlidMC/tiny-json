@@ -2,7 +2,7 @@ package fish.cichlidmc.tinyjson.value.primitive;
 
 import fish.cichlidmc.tinyjson.value.JsonPrimitive;
 
-public class JsonString extends JsonPrimitive<String> {
+public final class JsonString extends JsonPrimitive<String> {
 	private final String value;
 
 	public JsonString(String value) {
@@ -11,7 +11,7 @@ public class JsonString extends JsonPrimitive<String> {
 
 	@Override
 	public String value() {
-		return value;
+		return this.value;
 	}
 
 	@Override
@@ -26,7 +26,12 @@ public class JsonString extends JsonPrimitive<String> {
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof JsonString && this.value.equals(((JsonString) obj).value);
+		return obj instanceof JsonString that && this.value.equals(that.value);
+	}
+
+	@Override
+	public int hashCode() {
+		return this.value.hashCode();
 	}
 
 	@Override

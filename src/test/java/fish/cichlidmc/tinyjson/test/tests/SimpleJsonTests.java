@@ -15,6 +15,8 @@ public class SimpleJsonTests {
 	public static final JsonValue SINGLE_STRING = new JsonString("test string");
 	@Test
 	public static final JsonValue STRING_ARRAY = JsonArray.of(new JsonString("first"), new JsonString("second"));
+	@Test
+	public static final JsonValue COMICALLY_LARGE_NUMBER = new JsonNumber(1e30);
 
 	@Test(fails = true)
 	public static final String GARBAGE = "Could not parse value at line 1, col. 1";

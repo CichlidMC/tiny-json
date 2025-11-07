@@ -29,6 +29,20 @@ public class Main {
 
 		parseDoohickey("doohickey.json");
 		parseDoohickey("wrong_doohickey.json");
+
+		JsonObject json = new JsonObject()
+				.put("int", 1000)
+				.put("float", 0.5);
+
+		String expected = """
+				{
+					"int": 1000,
+					"float": 0.5
+				}""";
+
+		if (!expected.equals(json.toString())) {
+			throw new RuntimeException("Bad number formatting: " + json);
+		}
 	}
 
 	private static void parseDoohickey(String name) {

@@ -13,7 +13,7 @@ import fish.cichlidmc.tinyjson.value.primitive.JsonString;
  * All JsonValues store a path to themselves for identification in errors. This means that one
  * JsonValue cannot be shared between multiple JsonObjects or JsonArrays and a copy must be made.
  */
-public abstract class JsonValue {
+public abstract sealed class JsonValue permits JsonPrimitive, JsonArray, JsonObject {
 	public static final String ROOT_PATH = "$";
 	private String path;
 
@@ -29,7 +29,7 @@ public abstract class JsonValue {
 	@Override
 	public abstract String toString();
 
-	// conversion to specific types
+	// conversion to specific types. will throw JsonException if the type doesn't match
 
 	public JsonArray asArray() 		{ throw this.typeError("an array");		}
 	public JsonBool asBoolean() 	{ throw this.typeError("a boolean");	}

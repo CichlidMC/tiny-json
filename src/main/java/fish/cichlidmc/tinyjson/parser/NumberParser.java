@@ -8,10 +8,12 @@ import java.io.IOException;
 import fish.cichlidmc.tinyjson.parser.util.ParseInput;
 import fish.cichlidmc.tinyjson.value.primitive.JsonNumber;
 
-public class NumberParser {
+public final class NumberParser {
 	public static final char PLUS = '+';
 	public static final char MINUS = '-';
 	public static final char DECIMAL = '.';
+
+	private NumberParser() {}
 
 	static JsonNumber parse(ParseInput input) throws IOException {
 		StringBuilder builder = new StringBuilder();
