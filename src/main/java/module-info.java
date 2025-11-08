@@ -1,5 +1,5 @@
 open module fish.cichlidmc.tinyjson {
-	requires static org.jetbrains.annotations;
+	requires static transitive org.jetbrains.annotations;
 
 	exports fish.cichlidmc.tinyjson;
 	exports fish.cichlidmc.tinyjson.value;
