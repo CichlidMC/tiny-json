@@ -7,25 +7,21 @@ import fish.cichlidmc.tinyjson.value.primitive.JsonBool;
 import fish.cichlidmc.tinyjson.value.primitive.JsonNull;
 import fish.cichlidmc.tinyjson.value.primitive.JsonNumber;
 import fish.cichlidmc.tinyjson.value.primitive.JsonString;
+import org.jspecify.annotations.Nullable;
 
-/**
- * Parent class to all JSON representations.
- * All JsonValues store a path to themselves for identification in errors. This means that one
- * JsonValue cannot be shared between multiple JsonObjects or JsonArrays and a copy must be made.
- */
+/// Parent class to all JSON representations.
+/// All JsonValues store a path to themselves for identification in errors. This means that one
+/// JsonValue cannot be shared between multiple JsonObjects or JsonArrays and a copy must be made.
 public abstract sealed class JsonValue permits JsonPrimitive, JsonArray, JsonObject {
 	public static final String ROOT_PATH = "$";
+	@Nullable
 	private String path;
 
-	/**
-	 * Create a deep copy of this value and all children.
-	 * The path of this value is not preserved, and all children are updated so that the copy is their root.
-	 */
+	/// Create a deep copy of this value and all children.
+	/// The path of this value is not preserved, and all children are updated so that the copy is their root.
 	public abstract JsonValue copy();
 
-	/**
-	 * Create a pretty-printed string representing this JSON value. This string is parseable back into a JsonValue.
-	 */
+	/// Create a pretty-printed string representing this JSON value. This string is parseable back into a JsonValue.
 	@Override
 	public abstract String toString();
 
@@ -48,10 +44,8 @@ public abstract sealed class JsonValue permits JsonPrimitive, JsonArray, JsonObj
 		}
 	}
 
-	/**
-	 * internal - do not call this directly. Paths are managed by JsonArray and JsonObject.
-	 */
-	public void setPath(String path) {
+	/// internal - do not call this directly. Paths are managed by JsonArray and JsonObject.
+	public void setPath(@Nullable String path) {
 		if (this.hasPath() && path != null) {
 			throw new IllegalStateException("Cannot override path " + this.path + " with " + path);
 		}

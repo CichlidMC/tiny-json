@@ -1,5 +1,8 @@
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 open module fish.cichlidmc.tinyjson {
-	requires static transitive org.jetbrains.annotations;
+	requires static transitive org.jspecify;
 
 	exports fish.cichlidmc.tinyjson;
 	exports fish.cichlidmc.tinyjson.value;

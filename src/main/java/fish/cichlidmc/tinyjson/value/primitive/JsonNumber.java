@@ -39,10 +39,8 @@ public final class JsonNumber extends JsonPrimitive<Double> {
 		return this.value;
 	}
 
-	/**
-	 * Get a wrapper for the value of this JsonNumber that validates that the value is valid for the desired type.
-	 * For example, for a value of 1.1, calling intValue will throw.
-	 */
+	/// Get a wrapper for the value of this JsonNumber that validates that the value is valid for the desired type.
+	/// For example, for a value of 1.1, calling intValue will throw.
 	public Number strictValue() {
 		return new StrictAccess();
 	}

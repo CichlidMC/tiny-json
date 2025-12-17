@@ -1,9 +1,9 @@
 [versions]
-jetbrains-annotations = "24.1.0"
+jspecify = "1.0.0"
 junit = "6.0.1"
 
 [libraries]
-jetbrains-annotations = { module = "org.jetbrains:annotations", version.ref = "jetbrains-annotations" }
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
 junit-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
 

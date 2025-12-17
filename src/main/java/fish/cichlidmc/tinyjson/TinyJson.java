@@ -1,5 +1,9 @@
 package fish.cichlidmc.tinyjson;
 
+import fish.cichlidmc.tinyjson.parser.ValueParser;
+import fish.cichlidmc.tinyjson.parser.util.ParseInput;
+import fish.cichlidmc.tinyjson.value.JsonValue;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,22 +18,14 @@ import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import fish.cichlidmc.tinyjson.parser.ValueParser;
-import fish.cichlidmc.tinyjson.parser.util.ParseInput;
-import fish.cichlidmc.tinyjson.value.JsonValue;
-
-/**
- * Primary interface for TinyJson. Provides several methods for parsing JSON from various sources:
- * <ul>
- *     <li>Strings</li>
- *     <li>Files</li>
- *     <li>Paths</li>
- *     <li>URIs</li>
- *     <li>URLs</li>
- *     <li>InputStreams</li>
- *     <li>Readers</li>
- * </ul>
- */
+/// Primary interface for TinyJson. Provides several methods for parsing JSON from various sources:
+/// - Strings
+/// - Files
+/// - Paths
+/// - URIs
+/// - URLs
+/// - InputStreams
+/// - Readers
 public final class TinyJson {
 	private TinyJson() {}
 

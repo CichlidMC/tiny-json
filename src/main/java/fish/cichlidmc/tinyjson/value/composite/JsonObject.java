@@ -6,8 +6,7 @@ import fish.cichlidmc.tinyjson.value.primitive.JsonBool;
 import fish.cichlidmc.tinyjson.value.primitive.JsonNull;
 import fish.cichlidmc.tinyjson.value.primitive.JsonNumber;
 import fish.cichlidmc.tinyjson.value.primitive.JsonString;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -19,10 +18,8 @@ import java.util.SequencedSet;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-/**
- * Class for objects represented in JSON. Stores a map of keys to other JsonValues.
- * Also tracks which fields have been queried directly for verification purposes.
- */
+/// Class for objects represented in JSON. Stores a map of keys to other JsonValues.
+/// Also tracks which fields have been queried directly for verification purposes.
 public final class JsonObject extends JsonValue {
 	private final LinkedHashMap<String, JsonValue> entries = new LinkedHashMap<>();
 	private final Set<String> queried = new HashSet<>();
@@ -42,26 +39,22 @@ public final class JsonObject extends JsonValue {
 	public JsonObject put(String key, double value)		{ return this.put(key, new JsonNumber(value));	}
 	public JsonObject put(String key, String value)		{ return this.put(key, new JsonString(value));	}
 
-	/**
-	 * @return the value associated with the given key, or null if no value exists
-	 */
+	/// @return the value associated with the given key, or null if no value exists
 	@Nullable
 	public JsonValue get(String key) {
 		this.queried.add(key);
 		return this.entries.get(key);
 	}
 
-	/**
-	 * @return an optional holding the value associated with the given key, or empty if no value exists
-	 */
+	/// @return an optional holding the value associated with the given key, or empty if no value exists
 	public Optional<JsonValue> getOptional(String key) {
-		return Optional.ofNullable(this.get(key));
+		// inlining this local will cause an erroneous nullability warning
+		JsonValue value = this.get(key);
+		return Optional.ofNullable(value);
 	}
 
-	/**
-	 * @return the value associated with the given key, if present
-	 * @throws JsonException if there is no value associated with the given key
-	 */
+	/// @return the value associated with the given key, if present
+	/// @throws JsonException if there is no value associated with the given key
 	public JsonValue getOrThrow(String key) throws JsonException {
 		JsonValue value = this.get(key);
 		if (value == null) {
@@ -70,9 +63,7 @@ public final class JsonObject extends JsonValue {
 		return value;
 	}
 
-	/**
-	 * @return the value associated with the given key if present, otherwise a new {@link JsonNull}
-	 */
+	/// @return the value associated with the given key if present, otherwise a new [JsonNull]
 	public JsonValue getOrJsonNull(String key) {
 		JsonValue value = this.get(key);
 		if (value != null)
@@ -83,11 +74,10 @@ public final class JsonObject extends JsonValue {
 		return jsonNull;
 	}
 
-	/**
-	 * Remove the value associated with the given key from this object.
-	 * Since the value is no longer associated with this object, its path is cleared.
-	 * @return the removed object, or null if it did not exist
-	 */
+	/// Remove the value associated with the given key from this object.
+	/// Since the value is no longer associated with this object, its path is cleared.
+	/// @return the removed object, or null if it did not exist
+	@Nullable
 	public JsonValue remove(String key) {
 		JsonValue removed = this.entries.remove(key);
 		if (removed != null) {
@@ -109,41 +99,30 @@ public final class JsonObject extends JsonValue {
 		this.entries.forEach(consumer);
 	}
 
-	/**
-	 * @return a read-only view of all keys in this object
-	 */
+	/// @return a read-only view of all keys in this object
 	public SequencedSet<String> keys() {
 		return Collections.unmodifiableSequencedSet(this.entries.sequencedKeySet());
 	}
 
-	/**
-	 * @return a read-only view of all values in this object
-	 */
+	/// @return a read-only view of all values in this object
 	public SequencedCollection<JsonValue> values() {
 		return Collections.unmodifiableSequencedCollection(this.entries.sequencedValues());
 	}
 
-	/**
-	 * @return a read-only view of all entries in this object
-	 */
+	/// @return a read-only view of all entries in this object
 	public Set<Map.Entry<String, JsonValue>> entrySet() {
 		return Collections.unmodifiableSequencedSet(this.entries.sequencedEntrySet());
 	}
 
-	/**
-	 * @return a read-only view of the set of keys that have been accessed directly.
-	 * This will not include keys that have been iterated over.
-	 */
+	/// @return a read-only view of the set of keys that have been accessed directly.
+	/// This will not include keys that have been iterated over.
 	public Set<String> queriedKeys() {
 		return Collections.unmodifiableSet(this.queried);
 	}
 
-	/**
-	 * Create a new set containing all keys within this object that have not been queried.
-	 * This is equivalent to {@code keys - queriedKeys}. Since a new set is returned, you
-	 * are free to modify it if you so desire.
-	 */
-	@Contract("->new")
+	/// Create a new set containing all keys within this object that have not been queried.
+	/// This is equivalent to `keys - queriedKeys`. Since a new set is returned, you
+	/// are free to modify it if you so desire.
 	public Set<String> unusedKeys() {
 		Set<String> keys = new HashSet<>(this.entries.keySet());
 		keys.removeAll(this.queried);
@@ -189,7 +168,7 @@ public final class JsonObject extends JsonValue {
 	}
 
 	@Override
-	public void setPath(String path) {
+	public void setPath(@Nullable String path) {
 		super.setPath(path);
 		this.forEach((key, value) -> {
 			// reset path first

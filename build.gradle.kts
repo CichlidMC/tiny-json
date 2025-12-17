@@ -4,21 +4,21 @@ plugins {
 }
 
 group = "fish.cichlidmc"
-version = "2.0.1"
+version = "3.0.0"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compileOnlyApi(libs.jetbrains.annotations)
+    compileOnlyApi(libs.jspecify)
     testImplementation(libs.bundles.junit)
 }
 
 java {
     withSourcesJar()
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 

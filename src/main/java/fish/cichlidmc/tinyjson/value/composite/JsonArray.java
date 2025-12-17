@@ -1,16 +1,17 @@
 package fish.cichlidmc.tinyjson.value.composite;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Stream;
-
 import fish.cichlidmc.tinyjson.JsonException;
 import fish.cichlidmc.tinyjson.value.JsonValue;
 import fish.cichlidmc.tinyjson.value.primitive.JsonBool;
 import fish.cichlidmc.tinyjson.value.primitive.JsonNull;
 import fish.cichlidmc.tinyjson.value.primitive.JsonNumber;
 import fish.cichlidmc.tinyjson.value.primitive.JsonString;
+import org.jspecify.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Stream;
 
 public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	private final List<JsonValue> values = new ArrayList<>();
@@ -110,7 +111,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 	}
 
 	@Override
-	public void setPath(String path) {
+	public void setPath(@Nullable String path) {
 		super.setPath(path);
 		for (int i = 0; i < this.size(); i++) {
 			JsonValue value = this.get(i);
@@ -130,6 +131,7 @@ public final class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
 	private static final class JsonArrayIterator implements Iterator<JsonValue> {
 		private final Iterator<JsonValue> wrapped;
+		@Nullable
 		private JsonValue lastReturned;
 
 		private JsonArrayIterator(Iterator<JsonValue> wrapped) {
